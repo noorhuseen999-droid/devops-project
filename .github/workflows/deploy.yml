@@ -12,8 +12,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Build Docker image
-      run: docker build -t devops-app .
+    - name: Login to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-    - name: Run container
-      run: docker run -d -p 80:80 devops-app
+    - name: Build and Push
+      run: |
+        docker build -t noorhuseen/devops-app:latest .
+        docker push noorhuseen/devops-app:latest
